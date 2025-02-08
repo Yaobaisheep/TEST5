@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>杨佳鑫的个人网页123</title>
+    <title>杨佳鑫的互动网页</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,30 +42,88 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin: 5px;
         }
         button:hover {
             background-color: #0056b3;
         }
-        #message {
-            margin-top: 20px;
-            font-size: 1.1em;
-            color: #28a745;
+        .hidden {
             display: none;
+        }
+        #gameSection {
+            margin-top: 20px;
+        }
+        #gameSection input {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #gameSection button {
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>你好，我是杨佳鑫</h1>
-        <p>欢迎来到我的个人网页！这里是一个简单的互动页面，希望你喜欢。</p>
-        <button onclick="showMessage()">点击这里</button>
-        <p id="message">谢谢你点击了按钮！祝你今天可以说是非常的愉快！</p>
+        <p>欢迎来到我的互动网页！点击按钮开始吧。</p>
+        <button onclick="startInteraction()">点击这里</button>
+
+        <!-- 第一阶段：提示 -->
+        <div id="promptSection" class="hidden">
+            <p>你知道我喜欢谁吗？</p>
+            <button onclick="showGame()">想</button>
+            <button onclick="endInteraction()">不想</button>
+        </div>
+
+        <!-- 第二阶段：小游戏 -->
+        <div id="gameSection" class="hidden">
+            <p>猜一个1到10之间的数字：</p>
+            <input type="number" id="guessInput" min="1" max="10">
+            <button onclick="checkGuess()">提交</button>
+            <p id="gameMessage"></p>
+        </div>
+
+        <!-- 结果 -->
+        <div id="resultSection" class="hidden">
+            <p id="resultMessage"></p>
+        </div>
     </div>
 
     <script>
-        function showMessage() {
-            const message = document.getElementById('message');
-            message.style.display = 'block';
+        let targetNumber = Math.floor(Math.random() * 10) + 1; // 随机生成1到10的数字
+
+        function startInteraction() {
+            document.querySelector('button').style.display = 'none';
+            document.getElementById('promptSection').classList.remove('hidden');
+        }
+
+        function showGame() {
+            document.getElementById('promptSection').classList.add('hidden');
+            document.getElementById('gameSection').classList.remove('hidden');
+        }
+
+        function endInteraction() {
+            document.getElementById('promptSection').classList.add('hidden');
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultMessage').textContent = '好吧，再见！';
+        }
+
+        function checkGuess() {
+            const guess = parseInt(document.getElementById('guessInput').value);
+            const gameMessage = document.getElementById('gameMessage');
+
+            if (guess === targetNumber) {
+                gameMessage.textContent = '恭喜你，猜对了！';
+                document.getElementById('gameSection').classList.add('hidden');
+                document.getElementById('resultSection').classList.remove('hidden');
+                document.getElementById('resultMessage').textContent = '我喜欢刘泽萱！';
+            } else if (guess < targetNumber) {
+                gameMessage.textContent = '太低了，再试试！';
+            } else if (guess > targetNumber) {
+                gameMessage.textContent = '太高了，再试试！';
+            }
         }
     </script>
 </body>
